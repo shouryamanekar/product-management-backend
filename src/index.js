@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
+const productRoutes = require("./routes/productRoutes");
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+app.use("/api/products", productRoutes);
 
 // Server
 const PORT = process.env.PORT || 5000;
