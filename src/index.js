@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const productRoutes = require("./routes/productRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productRoutes);
+app.use("/api/auth", authRoutes);
 
 // Server
 const PORT = process.env.PORT || 5000;
