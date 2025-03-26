@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const swaggerDocs = require("./utils/swagger");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors());
+swaggerDocs(app);
 
 // Routes
 app.get("/", (req, res) => {
