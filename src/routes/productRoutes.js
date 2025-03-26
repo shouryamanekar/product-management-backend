@@ -6,6 +6,7 @@ const {
     updateProduct,
     deleteProduct,
 } = require("../controllers/productController");
+const protect = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
@@ -59,7 +60,7 @@ const router = express.Router();
  *       500:
  *         description: Some server error
  */
-router.post("/", createProduct);
+router.post("/", protect,createProduct);
 
 /**
  * @swagger
@@ -131,7 +132,7 @@ router.get("/:id", getProductById);
  *       500:
  *         description: Some server error
  */
-router.put("/:id", updateProduct);
+router.put("/:id",protect, updateProduct);
 
 /**
  * @swagger
@@ -152,6 +153,6 @@ router.put("/:id", updateProduct);
  *       404:
  *         description: The product was not found
  */
-router.delete("/:id", deleteProduct);
+router.delete("/:id",protect, deleteProduct);
 
 module.exports = router;
