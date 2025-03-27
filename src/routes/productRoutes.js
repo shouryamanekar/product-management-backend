@@ -1,10 +1,10 @@
 const express = require("express");
 const {
-    createProduct,
-    getProducts,
-    getProductById,
-    updateProduct,
-    deleteProduct,
+  createProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct,
 } = require("../controllers/productController");
 const protect = require("../middlewares/authMiddleware");
 
@@ -12,147 +12,158 @@ const router = express.Router();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Product:
- *       type: object
- *       required:
- *         - name
- *         - price
- *       properties:
- *         id:
- *           type: string
- *           description: The auto-generated ID of the product
- *         name:
- *           type: string
- *           description: The name of the product
- *         price:
- *           type: number
- *           description: The price of the product
- *       example:
- *         id: 1
- *         name: Sample Product
- *         price: 100
- */
-
-/**
- * @swagger
  * tags:
  *   name: Products
- *   description: The product management API
+ *   description: Product management endpoints
  */
 
 /**
  * @swagger
- * /:
+ * /api/products:
  *   post:
  *     summary: Create a new product
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               description:
+ *                 type: string
+ *               stock:
+ *                 type: number
  *     responses:
  *       201:
- *         description: The product was successfully created
- *       500:
- *         description: Some server error
+ *         description: Product created successfully
+ *       400:
+ *         description: Missing required fields
  */
-router.post("/", protect,createProduct);
+router.post("/", protect, createProduct);
 
 /**
  * @swagger
- * /:
+ * /api/products:
  *   get:
- *     summary: Get all products
+ *     summary: Get all products with search, filter, and pagination
  *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by product name (case insensitive)
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *         description: Filter by minimum price
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *         description: Filter by maximum price
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Number of products per page
  *     responses:
  *       200:
- *         description: The list of products
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Product'
+ *         description: Successfully fetched products
  */
 router.get("/", getProducts);
 
+
 /**
  * @swagger
- * /{id}:
+ * /api/products/{id}:
  *   get:
  *     summary: Get a product by ID
  *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: The product ID
  *     responses:
  *       200:
- *         description: The product description by ID
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Product'
+ *         description: Successfully fetched product
  *       404:
- *         description: The product was not found
+ *         description: Product not found
  */
-router.get("/:id", getProductById);
+router.get("/:id", protect, getProductById);
 
 /**
  * @swagger
- * /{id}:
+ * /api/products/{id}:
  *   put:
- *     summary: Update a product by ID
+ *     summary: Update a product
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: The product ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               description:
+ *                 type: string
+ *               stock:
+ *                 type: number
  *     responses:
  *       200:
- *         description: The product was updated
+ *         description: Successfully updated product
  *       404:
- *         description: The product was not found
- *       500:
- *         description: Some server error
+ *         description: Product not found
  */
-router.put("/:id",protect, updateProduct);
+router.put("/:id", protect, updateProduct);
 
 /**
  * @swagger
- * /{id}:
+ * /api/products/{id}:
  *   delete:
- *     summary: Delete a product by ID
+ *     summary: Delete a product
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: The product ID
  *     responses:
  *       200:
- *         description: The product was deleted
+ *         description: Successfully deleted product
  *       404:
- *         description: The product was not found
+ *         description: Product not found
  */
-router.delete("/:id",protect, deleteProduct);
+router.delete("/:id", protect, deleteProduct);
 
 module.exports = router;

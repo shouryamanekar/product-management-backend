@@ -20,17 +20,48 @@ const createProduct = async (req, res) => {
   }
 };
 
-// @desc   Get all products
+// @desc   Get all products with search, filter, and pagination
 // @route  GET /api/products
 // @access Public
 const getProducts = async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
+    try {
+      let { search, minPrice, maxPrice, page, limit } = req.query;
+  
+      const query = {};
+  
+      // Search by product name
+      if (search) {
+        query.name = { $regex: search, $options: "i" }; // Case-insensitive search
+      }
+  
+      // Filter by price range
+      if (minPrice || maxPrice) {
+        query.price = {};
+        if (minPrice) query.price.$gte = Number(minPrice);
+        if (maxPrice) query.price.$lte = Number(maxPrice);
+      }
+  
+      // Pagination setup
+      const pageNumber = Number(page) || 1;
+      const pageSize = Number(limit) || 10;
+      const skip = (pageNumber - 1) * pageSize;
+  
+      const total = await Product.countDocuments(query);
+  
+      const products = await Product.find(query)
+        .skip(skip)
+        .limit(pageSize);
+  
+      res.json({
+        total,
+        page: pageNumber,
+        pages: Math.ceil(total / pageSize),
+        products,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };  
 
 // @desc   Get product by ID
 // @route  GET /api/products/:id
