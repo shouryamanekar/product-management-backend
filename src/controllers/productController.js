@@ -92,6 +92,10 @@ const updateProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    if (!name && price === undefined && !description && stock === undefined) {
+      return res.status(400).json({ message: "At least one field is required to update the product" });
+    }
+
     product.name = name || product.name;
     product.price = price || product.price;
     product.description = description || product.description;
@@ -100,6 +104,9 @@ const updateProduct = async (req, res) => {
     await product.save();
     res.json(product);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ message: error.message });
+    }
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
