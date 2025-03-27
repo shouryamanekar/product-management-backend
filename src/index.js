@@ -13,11 +13,18 @@ const app = express();
 // Connect to DB
 connectDB();
 
+// CORS Configuration
+const corsOptions = {
+    origin: process.env.CORS_ORIGIN || "*", // Allow frontend origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  };
+
 // Middleware
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 swaggerDocs(app);
 
 // Routes
