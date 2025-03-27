@@ -84,7 +84,7 @@ router.post("/", protect, createProduct);
  *       200:
  *         description: Successfully fetched products
  */
-router.get("/", getProducts);
+router.get("/", protect, getProducts);
 
 
 /**
