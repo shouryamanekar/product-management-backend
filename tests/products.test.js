@@ -117,6 +117,6 @@ describe("Product Endpoints", () => {
 
 afterAll(async () => {
   await Product.deleteOne({ _id: productId });
-  await User.deleteOne({ email: process.env.TEST_USER_EMAIL });
+  await User.deleteOne({ email: process.env.PRODUCT_TEST_USER_EMAIL });
   await mongoose.connection.close();
 });
