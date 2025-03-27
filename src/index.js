@@ -15,9 +15,9 @@ connectDB();
 
 // CORS Configuration
 const corsOptions = {
-    origin: process.env.CORS_ORIGIN || "*", // Allow frontend origin
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
+  origin: process.env.CORS_ORIGIN || "*", // Allow frontend origin
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
   };
 
 // Middleware
@@ -37,8 +37,6 @@ app.use("/api/auth", authRoutes);
 
 // Server
 const PORT = process.env.PORT || 5000;
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = app;
