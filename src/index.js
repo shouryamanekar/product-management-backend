@@ -15,10 +15,17 @@ connectDB();
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || "*", // Allow frontend origin
+  origin: (origin, callback) => {
+    const allowedOrigins = process.env.CORS_ORIGIN.split(",");
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
-  };
+};
 
 // Middleware
 app.use(express.json());
