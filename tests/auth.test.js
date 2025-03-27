@@ -6,9 +6,9 @@ const mongoose = require("mongoose");
 
 describe("Authentication Endpoints", () => {
   let testUser = {
-    name: process.env.TEST_USER_NAME,
-    email: process.env.TEST_USER_EMAIL,
-    password: process.env.TEST_USER_PASSWORD,
+    name: process.env.AUTH_TEST_USER_NAME,
+    email: process.env.AUTH_TEST_USER_EMAIL,
+    password: process.env.AUTH_TEST_USER_PASSWORD,
   };
 
   it("should register a new user", async () => {

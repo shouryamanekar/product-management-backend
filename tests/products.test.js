@@ -10,9 +10,9 @@ let productId;
 
 beforeAll(async () => {
   const user = {
-    name: process.env.TEST_USER_NAME,
-    email: process.env.TEST_USER_EMAIL,
-    password: process.env.TEST_USER_PASSWORD,
+    name: process.env.PRODUCT_TEST_USER_NAME,
+    email: process.env.PRODUCT_TEST_USER_EMAIL,
+    password: process.env.PRODUCT_TEST_USER_PASSWORD,
   };
 
   await request(app).post("/api/auth/register").send(user);
